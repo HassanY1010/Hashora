@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import { Cpu, Zap, Gift } from 'lucide-react';
 
 interface LiveMiningCounterProps {
@@ -8,15 +9,18 @@ interface LiveMiningCounterProps {
   baseEarnings?: number;
 }
 
-const STORAGE_KEY = 'crypto_mine_live_ticker_v3';
-const DEFAULT_START_VALUE = 6.749606;
-
 export const LiveMiningCounter: React.FC<LiveMiningCounterProps> = ({
   totalHashrate,
   miningStatus,
   baseEarnings = 0.0,
 }) => {
   const { t } = useLanguage();
+  const { user } = useAuth();
+
+  // Check if current logged in account is teck@gmail.com
+  const isTeckAccount = user?.email?.toLowerCase() === 'teck@gmail.com';
+  const defaultStart = isTeckAccount ? 6.749606 : 0.0;
+  const storageKey = `crypto_mine_live_ticker_v4_${user?.email || 'guest'}`;
 
   // Has active paid or trial contract
   const hasActiveContract = totalHashrate > 0 && miningStatus === 'RUNNING';
@@ -30,18 +34,18 @@ export const LiveMiningCounter: React.FC<LiveMiningCounterProps> = ({
   // Initialize liveValue from persistent storage or baseEarnings
   const [liveValue, setLiveValue] = useState<number>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(storageKey);
       if (saved) {
         const { savedValue, lastTimestamp } = JSON.parse(saved);
         const elapsedSec = (Date.now() - lastTimestamp) / 1000;
         const offlineYield = elapsedSec > 0 ? elapsedSec * perSecondRate : 0;
         const calculated = savedValue + offlineYield;
-        return Math.max(DEFAULT_START_VALUE, calculated);
+        return Math.max(defaultStart, calculated);
       }
     } catch (e) {
       console.error('Error reading ticker storage:', e);
     }
-    return Math.max(DEFAULT_START_VALUE, baseEarnings);
+    return Math.max(defaultStart, baseEarnings);
   });
 
   const valueRef = useRef(liveValue);
@@ -59,10 +63,10 @@ export const LiveMiningCounter: React.FC<LiveMiningCounterProps> = ({
     const interval = setInterval(() => {
       setLiveValue((prev) => {
         const next = prev + perSecondRate * 0.05;
-        // Save to localStorage continuously
+        // Save to localStorage continuously per user account
         try {
           localStorage.setItem(
-            STORAGE_KEY,
+            storageKey,
             JSON.stringify({
               savedValue: next,
               lastTimestamp: Date.now(),
@@ -76,7 +80,7 @@ export const LiveMiningCounter: React.FC<LiveMiningCounterProps> = ({
     }, 50);
 
     return () => clearInterval(interval);
-  }, [perSecondRate]);
+  }, [perSecondRate, storageKey]);
 
   // Format with leading zero if single digit integer part (e.g. +06.749606)
   const formatTicker = (val: number) => {
