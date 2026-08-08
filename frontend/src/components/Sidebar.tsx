@@ -36,6 +36,7 @@ export const Sidebar: React.FC = () => {
     { to: '/withdraw', label: t('withdraw'), icon: ArrowUpRight },
     { to: '/transactions', label: t('transactions'), icon: History },
     { to: '/referrals', label: t('referrals'), icon: Users },
+    { to: '/settings', label: t('userSettings'), icon: Settings },
   ];
 
   const adminNavItems = [

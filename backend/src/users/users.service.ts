@@ -26,7 +26,78 @@ export class UsersService {
       throw new NotFoundException('User profile not found.');
     }
 
-    return user;
+    const walletAddresses = await this.prisma.walletAddress.findMany({ where: { userId } });
+
+    return {
+      ...user,
+      walletAddresses,
+    };
+  }
+
+  async updateProfile(userId: string, dto: { fullName?: string; walletAddress?: string }) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...(dto.fullName && { fullName: dto.fullName.trim() }),
+      },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        role: true,
+        status: true,
+        referralCode: true,
+        createdAt: true,
+        wallet: true,
+      },
+    });
+
+    if (dto.walletAddress && dto.walletAddress.trim()) {
+      const cleanAddress = dto.walletAddress.trim();
+      const existing = await this.prisma.walletAddress.findFirst({ where: { userId } });
+      if (existing) {
+        await this.prisma.walletAddress.update({
+          where: { id: existing.id },
+          data: { address: cleanAddress },
+        });
+      } else {
+        await this.prisma.walletAddress.create({
+          data: { userId, address: cleanAddress, network: 'TRC20' },
+        });
+      }
+    }
+
+    return { message: 'Profile updated successfully.', user: updatedUser };
+  }
+
+  async changePassword(userId: string, dto: { currentPassword: string; newPassword: string }) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    const bcrypt = require('bcrypt');
+    const isMatch = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+    if (!isMatch) {
+      throw new BadRequestException('Current password is incorrect.');
+    }
+
+    if (!dto.newPassword || dto.newPassword.length < 6) {
+      throw new BadRequestException('New password must be at least 6 characters long.');
+    }
+
+    const newPasswordHash = await bcrypt.hash(dto.newPassword, 10);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: newPasswordHash },
+    });
+
+    return { message: 'Password updated successfully.' };
   }
 
   async getAllUsersForAdmin(search?: string, status?: UserStatus, page = 1, limit = 20) {

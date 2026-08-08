@@ -21,6 +21,28 @@ export class UsersController {
     return this.usersService.getUserProfile(userId);
   }
 
+  @ApiOperation({ summary: 'Update user profile (fullName, walletAddress)' })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Put('profile')
+  async updateProfile(
+    @GetUser('id') userId: string,
+    @Body() dto: { fullName?: string; walletAddress?: string },
+  ) {
+    return this.usersService.updateProfile(userId, dto);
+  }
+
+  @ApiOperation({ summary: 'Change user password' })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Put('change-password')
+  async changePassword(
+    @GetUser('id') userId: string,
+    @Body() dto: { currentPassword: string; newPassword: string },
+  ) {
+    return this.usersService.changePassword(userId, dto);
+  }
+
   @ApiOperation({ summary: 'Admin: Search & list all registered users' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)

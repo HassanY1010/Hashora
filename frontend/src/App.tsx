@@ -14,6 +14,7 @@ const DepositPage = lazy(() => import('./pages/DepositPage').then((m) => ({ defa
 const WithdrawPage = lazy(() => import('./pages/WithdrawPage').then((m) => ({ default: m.WithdrawPage })));
 const TransactionsPage = lazy(() => import('./pages/TransactionsPage').then((m) => ({ default: m.TransactionsPage })));
 const ReferralsPage = lazy(() => import('./pages/ReferralsPage').then((m) => ({ default: m.ReferralsPage })));
+const UserSettingsPage = lazy(() => import('./pages/UserSettingsPage').then((m) => ({ default: m.UserSettingsPage })));
 
 // Admin Pages
 const AdminLoginPage = lazy(() => import('./pages/AdminLoginPage').then((m) => ({ default: m.AdminLoginPage })));
@@ -76,6 +77,7 @@ export const App: React.FC = () => {
         <Route path="/withdraw" element={<ProtectedRoute><WithdrawPage /></ProtectedRoute>} />
         <Route path="/transactions" element={<ProtectedRoute><TransactionsPage /></ProtectedRoute>} />
         <Route path="/referrals" element={<ProtectedRoute><ReferralsPage /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><UserSettingsPage /></ProtectedRoute>} />
 
         {/* Admin Portal Routes */}
         <Route path="/admin/login" element={<AdminLoginPage />} />

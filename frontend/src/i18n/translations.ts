@@ -22,8 +22,26 @@ export const translations: Record<Language, Record<string, string>> = {
     withdraw: 'Withdraw',
     transactions: 'Transactions',
     referrals: 'Referrals',
+    userSettings: 'Account Settings',
     logout: 'Log Out',
     adminPortal: 'ADMIN PORTAL',
+
+    // Settings Page
+    userSettingsTitle: 'Account Settings & Profile',
+    userSettingsSub: 'Manage your profile details, default TRC20 payout address, and security settings.',
+    profileInfoSection: 'Profile & Personal Information',
+    securityPasswordSection: 'Security & Password Change',
+    accountSummarySection: 'Account Overview & Membership',
+    updateProfileBtn: 'Update Profile Details',
+    changePasswordBtn: 'Update Password',
+    currentPasswordLabel: 'Current Password',
+    newPasswordLabel: 'New Password',
+    confirmNewPasswordLabel: 'Confirm New Password',
+    defaultWalletAddressLabel: 'Default TRC20 Payout Wallet Address',
+    accountRole: 'Account Role',
+    accountStatus: 'Account Status',
+    referralCodeText: 'Your Referral Code',
+    memberSince: 'Member Since',
     
     // Auth Pages
     welcomeLoginTitle: 'Welcome Back',
@@ -305,8 +323,26 @@ export const translations: Record<Language, Record<string, string>> = {
     withdraw: 'سحب الأرباح',
     transactions: 'سجل المعاملات',
     referrals: 'برنامج الإحالات',
+    userSettings: 'إعدادات الحساب',
     logout: 'تسجيل الخروج',
     adminPortal: 'بوابة الإدارة العليا',
+
+    // Settings Page
+    userSettingsTitle: 'إعدادات الحساب والملف الشخصي',
+    userSettingsSub: 'إدارة معلوماتك الشخصية، عنوان السحب الافتراضي، وإعدادات الأمان.',
+    profileInfoSection: 'المعلومات الشخصية والملف',
+    securityPasswordSection: 'الأمان وتغيير كلمة المرور',
+    accountSummarySection: 'ملخص الحساب والعضوية',
+    updateProfileBtn: 'حفظ وتحديث البيانات',
+    changePasswordBtn: 'تغيير كلمة المرور',
+    currentPasswordLabel: 'كلمة المرور الحالية',
+    newPasswordLabel: 'كلمة المرور الجديدة',
+    confirmNewPasswordLabel: 'تأكيد كلمة المرور الجديدة',
+    defaultWalletAddressLabel: 'عنوان محفظة السحب الافتراضي (TRC20)',
+    accountRole: 'نوع الحساب',
+    accountStatus: 'حالة الحساب',
+    referralCodeText: 'كود الإحالة الخاص بك',
+    memberSince: 'انضم منذ',
     
     // Auth Pages
     welcomeLoginTitle: 'مرحباً بك مجدداً',
