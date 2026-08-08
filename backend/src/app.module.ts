@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { BlockchainModule } from './blockchain/blockchain.module';
 import { AuthModule } from './auth/auth.module';
@@ -31,5 +32,6 @@ import { NotificationsModule } from './notifications/notifications.module';
     AdminModule,
     NotificationsModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
