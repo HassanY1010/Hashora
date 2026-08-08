@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Shield, Lock, Mail, AlertCircle } from 'lucide-react';
 
 export const AdminLoginPage: React.FC = () => {
   const { adminLogin } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [email, setEmail] = useState('superadmin@platform.com');
   const [password, setPassword] = useState('SuperAdmin123@');
@@ -27,14 +30,19 @@ export const AdminLoginPage: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', position: 'relative' }}>
+      {/* Language Switcher Top Right */}
+      <div style={{ position: 'absolute', top: '24px', right: '24px', zIndex: 10 }}>
+        <LanguageSwitcher />
+      </div>
+
       <div className="glass-card" style={{ width: '100%', maxWidth: '440px', padding: '36px', borderColor: 'rgba(245, 158, 11, 0.3)' }}>
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <div style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', padding: '12px', borderRadius: '16px', display: 'inline-flex', marginBottom: '16px', boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}>
             <Shield size={32} color="#ffffff" />
           </div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Admin Portal Login</h2>
-          <p style={{ color: '#fbbf24', fontSize: '0.85rem', fontWeight: 600, marginTop: '4px' }}>Secured Platform Control Panel</p>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>{t('adminLoginTitle')}</h2>
+          <p style={{ color: '#fbbf24', fontSize: '0.85rem', fontWeight: 600, marginTop: '4px' }}>{t('adminLoginSub')}</p>
         </div>
 
         {error && (
@@ -46,7 +54,7 @@ export const AdminLoginPage: React.FC = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label className="input-label">Admin Email</label>
+            <label className="input-label">{t('adminEmailLabel')}</label>
             <div style={{ position: 'relative' }}>
               <input
                 type="email"
@@ -61,7 +69,7 @@ export const AdminLoginPage: React.FC = () => {
           </div>
 
           <div className="input-group">
-            <label className="input-label">Admin Password</label>
+            <label className="input-label">{t('adminPasswordLabel')}</label>
             <div style={{ position: 'relative' }}>
               <input
                 type="password"
@@ -82,7 +90,7 @@ export const AdminLoginPage: React.FC = () => {
             style={{ width: '100%', padding: '14px', justifyContent: 'center', background: 'linear-gradient(135deg, #f59e0b, #d97706)', marginTop: '10px' }}
           >
             <Shield size={18} />
-            {loading ? 'Verifying Admin Authority...' : 'Access Admin Dashboard'}
+            {loading ? t('verifyingAuthority') : t('accessAdminDashboard')}
           </button>
         </form>
       </div>

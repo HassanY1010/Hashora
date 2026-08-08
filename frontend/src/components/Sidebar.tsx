@@ -39,14 +39,14 @@ export const Sidebar: React.FC = () => {
   ];
 
   const adminNavItems = [
-    { to: '/admin/dashboard', label: 'Overview', icon: LayoutDashboard },
-    { to: '/admin/users', label: 'Users Control', icon: UserCheck },
-    { to: '/admin/plans', label: 'Plans Manager', icon: ShoppingBag },
-    { to: '/admin/contracts', label: 'Contracts', icon: Cpu },
-    { to: '/admin/deposits', label: 'Deposits Queue', icon: ArrowDownLeft },
-    { to: '/admin/withdrawals', label: 'Withdrawals Queue', icon: ArrowUpRight },
-    { to: '/admin/settings', label: 'System Settings', icon: Settings },
-    { to: '/admin/logs', label: 'Audit Logs', icon: ListChecks },
+    { to: '/admin/dashboard', label: t('adminOverviewTitle'), icon: LayoutDashboard },
+    { to: '/admin/users', label: t('userManagement'), icon: UserCheck },
+    { to: '/admin/plans', label: t('planManagement'), icon: ShoppingBag },
+    { to: '/admin/contracts', label: t('contractManagement'), icon: Cpu },
+    { to: '/admin/deposits', label: t('depositRequests'), icon: ArrowDownLeft },
+    { to: '/admin/withdrawals', label: t('withdrawalRequests'), icon: ArrowUpRight },
+    { to: '/admin/settings', label: t('systemSettingsTitle'), icon: Settings },
+    { to: '/admin/logs', label: t('auditLogsTitle'), icon: ListChecks },
   ];
 
   const navItems = isAdmin ? adminNavItems : userNavItems;
@@ -111,7 +111,7 @@ export const Sidebar: React.FC = () => {
             </div>
             <div>
               <span style={{ fontSize: '1.2rem', fontWeight: 800 }}>CryptoMine</span>
-              {isAdmin && <span style={{ display: 'block', fontSize: '0.7rem', color: '#fbbf24', fontWeight: 700, letterSpacing: '0.05em' }}>ADMIN PORTAL</span>}
+              {isAdmin && <span style={{ display: 'block', fontSize: '0.7rem', color: '#fbbf24', fontWeight: 700, letterSpacing: '0.05em' }}>{t('adminPortal')}</span>}
             </div>
           </div>
           <button

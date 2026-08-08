@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { apiClient } from '../api/client';
-import { Users, Cpu, ArrowDownLeft, ArrowUpRight, Award, Zap, RefreshCw, Activity } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { Users, Cpu, ArrowDownLeft, ArrowUpRight, Award, Zap, RefreshCw } from 'lucide-react';
 
 export const AdminDashboardPage: React.FC = () => {
+  const { t } = useLanguage();
   const [stats, setStats] = useState<any>({
     totalUsers: 0,
     activeContracts: 0,
@@ -51,13 +53,13 @@ export const AdminDashboardPage: React.FC = () => {
       <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
           <div>
-            <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Admin Platform Overview</h1>
-            <p style={{ color: '#fbbf24', fontSize: '0.9rem', fontWeight: 600 }}>Secured Financial & Operational Metrics</p>
+            <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{t('adminOverviewTitle')}</h1>
+            <p style={{ color: '#fbbf24', fontSize: '0.9rem', fontWeight: 600 }}>{t('adminOverviewSub')}</p>
           </div>
 
           <button onClick={handleRunRewardCycle} disabled={loadingCycle} className="btn-primary" style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
             <RefreshCw size={18} className={loadingCycle ? 'spin' : ''} />
-            {loadingCycle ? 'Running Yield Engine...' : 'Run Hourly Reward Cycle'}
+            {loadingCycle ? t('runningYieldEngine') : t('runRewardCycle')}
           </button>
         </div>
 
@@ -72,7 +74,7 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Total Users */}
           <div className="glass-card" style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>Total Registered Users</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>{t('registeredUsers')}</span>
               <Users size={20} color="#38bdf8" />
             </div>
             <span style={{ fontSize: '2rem', fontWeight: 800, color: '#ffffff' }}>{stats.totalUsers.toLocaleString()}</span>
@@ -81,7 +83,7 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Active Contracts */}
           <div className="glass-card" style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>Active Mining Contracts</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>{t('activeContracts')}</span>
               <Cpu size={20} color="#10b981" />
             </div>
             <span style={{ fontSize: '2rem', fontWeight: 800, color: '#34d399' }}>{stats.activeContracts.toLocaleString()}</span>
@@ -90,7 +92,7 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Total Deposits */}
           <div className="glass-card" style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>Total Confirmed Deposits</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>{t('totalConfirmedDeposits')}</span>
               <ArrowDownLeft size={20} color="#38bdf8" />
             </div>
             <span style={{ fontSize: '2rem', fontWeight: 800, color: '#38bdf8' }}>{stats.totalDeposits.toLocaleString()} USDT</span>
@@ -99,7 +101,7 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Total Withdrawals */}
           <div className="glass-card" style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>Total Completed Withdrawals</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>{t('totalCompletedWithdrawals')}</span>
               <ArrowUpRight size={20} color="#fbbf24" />
             </div>
             <span style={{ fontSize: '2rem', fontWeight: 800, color: '#fbbf24' }}>{stats.totalWithdrawals.toLocaleString()} USDT</span>
@@ -108,7 +110,7 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Total Mining Rewards */}
           <div className="glass-card" style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>Total Rewards Distributed</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>{t('totalRewardsDistributed')}</span>
               <Award size={20} color="#818cf8" />
             </div>
             <span style={{ fontSize: '2rem', fontWeight: 800, color: '#818cf8' }}>{stats.totalPaidRewards.toLocaleString()} USDT</span>
@@ -117,7 +119,7 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Current Total Hashrate */}
           <div className="glass-card" style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>Total Platform Hashrate</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>{t('totalPlatformHashrate')}</span>
               <Zap size={20} color="#f59e0b" />
             </div>
             <span style={{ fontSize: '2rem', fontWeight: 800, color: '#ffffff' }}>{(stats.totalHashrateMhs / 1000).toFixed(1)} TH/s</span>
@@ -126,17 +128,17 @@ export const AdminDashboardPage: React.FC = () => {
 
         {/* Recent Activity Feed */}
         <div className="glass-card" style={{ padding: '28px' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '20px' }}>Recent Platform Activity Feed</h3>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '20px' }}>{t('recentActivityFeed')}</h3>
 
           <div className="custom-table-container">
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th>User</th>
-                  <th>Activity Type</th>
-                  <th>Amount</th>
-                  <th>Description</th>
-                  <th>Time</th>
+                  <th>{t('userText')}</th>
+                  <th>{t('activityType')}</th>
+                  <th>{t('amount')}</th>
+                  <th>{t('description')}</th>
+                  <th>{t('timeText')}</th>
                 </tr>
               </thead>
               <tbody>

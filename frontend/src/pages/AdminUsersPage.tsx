@@ -3,9 +3,11 @@ import { Sidebar } from '../components/Sidebar';
 import { AdjustBalanceModal } from '../components/AdjustBalanceModal';
 import { apiClient } from '../api/client';
 import { useToast } from '../context/ToastContext';
-import { UserCheck, ShieldAlert, PauseCircle, PlayCircle, DollarSign } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { ShieldAlert, PauseCircle, DollarSign } from 'lucide-react';
 
 export const AdminUsersPage: React.FC = () => {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<any[]>([]);
   const [selectedUserForBalance, setSelectedUserForBalance] = useState<any | null>(null);
   const { showToast, showConfirm } = useToast();
@@ -26,7 +28,7 @@ export const AdminUsersPage: React.FC = () => {
   const handleToggleBlock = (user: any) => {
     const isBlocked = user.status === 'BLOCKED';
     showConfirm({
-      title: isBlocked ? 'Unblock User Account' : 'Block User Account',
+      title: isBlocked ? t('unblockUser') : t('blockUser'),
       message: `Are you sure you want to ${isBlocked ? 'unblock' : 'block'} user ${user.email}?`,
       variant: isBlocked ? 'primary' : 'danger',
       onConfirm: async () => {
@@ -63,8 +65,8 @@ export const AdminUsersPage: React.FC = () => {
 
       <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Users Management & Financial Control</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Search registered accounts, adjust wallet balances with audit logs, and manage access.</p>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{t('userManagement')}</h1>
+          <p style={{ color: 'var(--text-muted)' }}>{t('userManagementSub')}</p>
         </div>
 
         <div className="glass-card" style={{ padding: '28px' }}>
@@ -72,12 +74,12 @@ export const AdminUsersPage: React.FC = () => {
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th>User Details</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Available Balance</th>
-                  <th>Mining Balance</th>
-                  <th>Actions</th>
+                  <th>{t('userText')}</th>
+                  <th>{t('userRole')}</th>
+                  <th>{t('status')}</th>
+                  <th>{t('availableBalance')}</th>
+                  <th>{t('miningYieldEarnings')}</th>
+                  <th>{t('actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -108,7 +110,7 @@ export const AdminUsersPage: React.FC = () => {
                           className={u.status === 'BLOCKED' ? 'btn-success' : 'btn-danger'}
                           style={{ padding: '6px 12px', fontSize: '0.8rem' }}
                         >
-                          <ShieldAlert size={14} /> {u.status === 'BLOCKED' ? 'Unblock' : 'Block'}
+                          <ShieldAlert size={14} /> {u.status === 'BLOCKED' ? t('unblockUser') : t('blockUser')}
                         </button>
 
                         <button

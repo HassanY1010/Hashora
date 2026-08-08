@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { apiClient } from '../api/client';
+import { useLanguage } from '../context/LanguageContext';
 import { PauseCircle, PlayCircle, XCircle } from 'lucide-react';
 
 export const AdminContractsPage: React.FC = () => {
+  const { t } = useLanguage();
   const [contracts, setContracts] = useState<any[]>([]);
 
   useEffect(() => {
@@ -35,8 +37,8 @@ export const AdminContractsPage: React.FC = () => {
 
       <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Mining Contracts Management</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Monitor active platform contracts, suspend, resume, or terminate user contracts.</p>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{t('contractManagement')}</h1>
+          <p style={{ color: 'var(--text-muted)' }}>{t('contractManagementSub')}</p>
         </div>
 
         <div className="glass-card" style={{ padding: '28px' }}>
@@ -44,13 +46,13 @@ export const AdminContractsPage: React.FC = () => {
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th>Contract Code</th>
-                  <th>User</th>
-                  <th>Plan Name</th>
-                  <th>Hashrate</th>
-                  <th>Total Earned</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>{t('contractCode')}</th>
+                  <th>{t('userText')}</th>
+                  <th>{t('planName')}</th>
+                  <th>{t('miningHashrate')}</th>
+                  <th>{t('totalEarnings')}</th>
+                  <th>{t('status')}</th>
+                  <th>{t('actions')}</th>
                 </tr>
               </thead>
               <tbody>

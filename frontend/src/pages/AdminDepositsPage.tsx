@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { apiClient } from '../api/client';
 import { useToast } from '../context/ToastContext';
+import { useLanguage } from '../context/LanguageContext';
 import { Check, X } from 'lucide-react';
 
 export const AdminDepositsPage: React.FC = () => {
+  const { t } = useLanguage();
   const [deposits, setDeposits] = useState<any[]>([]);
   const { showToast, showConfirm, showPrompt } = useToast();
 
@@ -23,10 +25,10 @@ export const AdminDepositsPage: React.FC = () => {
 
   const handleConfirm = (id: string) => {
     showPrompt({
-      title: 'Confirm Deposit Transaction',
-      message: 'Enter TRC20 Transaction Hash (TXID) from TRON blockchain to credit user account:',
+      title: t('confirmDepositBtn'),
+      message: t('confirmDepositPrompt'),
       placeholder: 'e.g. 7f8a9b0c1d2e3f...',
-      confirmText: 'Confirm & Credit',
+      confirmText: t('confirmDepositBtn'),
       onConfirm: async (txHash: string) => {
         try {
           await apiClient.put(`/api/deposits/admin/${id}/confirm`, { txHash });
@@ -41,10 +43,10 @@ export const AdminDepositsPage: React.FC = () => {
 
   const handleReject = (id: string) => {
     showConfirm({
-      title: 'Reject Deposit Request',
+      title: t('rejectDepositBtn'),
       message: 'Are you sure you want to REJECT this deposit request?',
       variant: 'danger',
-      confirmText: 'Reject Deposit',
+      confirmText: t('rejectDepositBtn'),
       onConfirm: async () => {
         try {
           await apiClient.put(`/api/deposits/admin/${id}/reject`);
@@ -63,8 +65,8 @@ export const AdminDepositsPage: React.FC = () => {
 
       <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>USDT Deposits Approval Queue</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Review incoming USDT TRC20 transfers, insert TXID hashes, and credit user accounts.</p>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{t('depositRequests')}</h1>
+          <p style={{ color: 'var(--text-muted)' }}>{t('depositRequestsSub')}</p>
         </div>
 
         <div className="glass-card" style={{ padding: '28px' }}>
@@ -72,12 +74,12 @@ export const AdminDepositsPage: React.FC = () => {
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th>User</th>
-                  <th>Amount</th>
+                  <th>{t('userText')}</th>
+                  <th>{t('amount')}</th>
                   <th>TXID Hash</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>{t('dateTime')}</th>
+                  <th>{t('status')}</th>
+                  <th>{t('actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,10 +98,10 @@ export const AdminDepositsPage: React.FC = () => {
                       {d.status === 'PENDING' && (
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <button onClick={() => handleConfirm(d.id)} className="btn-success" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
-                            <Check size={14} /> Confirm Deposit
+                            <Check size={14} /> {t('confirmDepositBtn')}
                           </button>
                           <button onClick={() => handleReject(d.id)} className="btn-danger" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
-                            <X size={14} /> Reject
+                            <X size={14} /> {t('rejectDepositBtn')}
                           </button>
                         </div>
                       )}

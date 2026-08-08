@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { apiClient } from '../api/client';
-import { ListChecks } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export const AdminAuditLogsPage: React.FC = () => {
+  const { t } = useLanguage();
   const [logs, setLogs] = useState<any[]>([]);
 
   useEffect(() => {
@@ -25,8 +26,8 @@ export const AdminAuditLogsPage: React.FC = () => {
 
       <main style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Immutable Admin Audit Trail</h1>
-          <p style={{ color: 'var(--text-muted)' }}>Complete security audit log recording every administrative override, balance change, and status update.</p>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>{t('auditLogsTitle')}</h1>
+          <p style={{ color: 'var(--text-muted)' }}>{t('auditLogsSub')}</p>
         </div>
 
         <div className="glass-card" style={{ padding: '28px' }}>
@@ -34,11 +35,11 @@ export const AdminAuditLogsPage: React.FC = () => {
             <table className="custom-table">
               <thead>
                 <tr>
-                  <th>Timestamp</th>
-                  <th>Admin Email</th>
-                  <th>Action Executed</th>
+                  <th>{t('dateTime')}</th>
+                  <th>{t('adminUser')}</th>
+                  <th>{t('actionPerformed')}</th>
                   <th>Target User ID</th>
-                  <th>Action Details</th>
+                  <th>{t('description')}</th>
                 </tr>
               </thead>
               <tbody>
