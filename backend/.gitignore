@@ -1,0 +1,29 @@
+# Node Dependencies
+node_modules/
+
+# Compiled NestJS Distribution Output
+dist/
+
+# Local Environment Variables & Secrets
+.env
+.env.local
+.env.development
+.env.production
+
+# Local SQLite Databases
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+dev.db
+dev.db-journal
+
+# Logs & Debugging
+logs/
+*.log
+npm-debug.log*
+
+# Scratch & Temporary Utility Scripts
+scratch/
+scratch_*.js
+update_*.js

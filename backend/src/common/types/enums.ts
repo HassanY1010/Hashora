@@ -1,0 +1,60 @@
+export enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  SUPER_ADMIN = 'SUPER_ADMIN',
+}
+
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  BLOCKED = 'BLOCKED',
+  PENDING = 'PENDING',
+}
+
+export enum PlanStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export enum ContractStatus {
+  ACTIVE = 'ACTIVE',
+  PENDING = 'PENDING',
+  EXPIRED = 'EXPIRED',
+  SUSPENDED = 'SUSPENDED',
+}
+
+export enum DepositStatus {
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  FAILED = 'FAILED',
+}
+
+export enum WithdrawalStatus {
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  COMPLETED = 'COMPLETED',
+  REJECTED = 'REJECTED',
+}
+
+export enum TransactionType {
+  DEPOSIT = 'DEPOSIT',
+  WITHDRAWAL = 'WITHDRAWAL',
+  PLAN_PURCHASE = 'PLAN_PURCHASE',
+  MINING_REWARD = 'MINING_REWARD',
+  REFERRAL_COMMISSION = 'REFERRAL_COMMISSION',
+  BALANCE_ADJUSTMENT = 'BALANCE_ADJUSTMENT',
+}
+
+export enum TransactionStatus {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum NotificationType {
+  SYSTEM = 'SYSTEM',
+  DEPOSIT = 'DEPOSIT',
+  WITHDRAWAL = 'WITHDRAWAL',
+  MINING = 'MINING',
+  REFERRAL = 'REFERRAL',
+}

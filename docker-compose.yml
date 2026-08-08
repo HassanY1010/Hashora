@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: cloudmining-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword2026
+      POSTGRES_DB: cloudmining
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-cache:
+    image: redis:7-alpine
+    container_name: cloudmining-redis
+    restart: always
+    ports:
+      - '6379:6379'
+
+  nestjs-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cloudmining-backend
+    restart: always
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgrespassword2026@postgres-db:5432/cloudmining?schema=public"
+      PORT: 5000
+      JWT_SECRET: "super-secret-jwt-key-cloud-mining-2026-production-ready"
+      TRON_GRID_API_URL: "https://api.trongrid.io"
+      PLATFORM_TRC20_RECEIVER_ADDRESS: "TPlatformUsdtReceiverAddressTRC20OfficialX"
+    ports:
+      - '5000:5000'
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+  frontend-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cloudmining-frontend
+    restart: always
+    ports:
+      - '3000:80'
+    depends_on:
+      - nestjs-api
+
+volumes:
+  postgres_data:

@@ -1,0 +1,262 @@
+// Prisma Schema for Cloud Mining SaaS Platform (USDT TRC20) - PostgreSQL Mode (Supabase Compatible)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String     @id @default(uuid())
+  fullName      String     @map("full_name")
+  email         String     @unique
+  passwordHash  String     @map("password_hash")
+  role          String     @default("USER") // USER, ADMIN, SUPER_ADMIN
+  status        String     @default("ACTIVE") // ACTIVE, BLOCKED, PENDING
+  referralCode  String     @unique @map("referral_code")
+  referredById  String?    @map("referred_by_id")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  referredBy        User?             @relation("UserReferrals", fields: [referredById], references: [id])
+  referrals         User[]            @relation("UserReferrals")
+  wallet            Wallet?
+  walletAddresses   WalletAddress[]
+  contracts         MiningContract[]
+  deposits          Deposit[]
+  withdrawals       Withdrawal[]
+  rewards           MiningReward[]
+  transactions      Transaction[]
+  givenReferrals    Referral[]        @relation("Referrer")
+  receivedReferrals Referral[]        @relation("ReferredUser")
+  auditLogs         AuditLog[]        @relation("AdminAuditLogs")
+  targetAuditLogs   AuditLog[]        @relation("TargetUserAuditLogs")
+  notifications     Notification[]
+
+  @@index([email])
+  @@index([referralCode])
+  @@map("users")
+}
+
+model Wallet {
+  id               String   @id @default(uuid())
+  userId           String   @unique @map("user_id")
+  availableBalance Float    @default(0.0) @map("available_balance")
+  miningBalance    Float    @default(0.0) @map("mining_balance")
+  pendingBalance   Float    @default(0.0) @map("pending_balance")
+  currency         String   @default("USDT")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wallets")
+}
+
+model WalletAddress {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  address    String
+  network    String   @default("TRC20")
+  isVerified Boolean  @default(true) @map("is_verified")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("wallet_addresses")
+}
+
+model MiningPlan {
+  id           String     @id @default(uuid())
+  name         String
+  price        Float
+  hashrate     Int        // MH/s
+  durationDays Int        @map("duration_days")
+  description  String?
+  status       String     @default("ACTIVE") // ACTIVE, INACTIVE
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  contracts MiningContract[]
+
+  @@map("mining_plans")
+}
+
+model MiningContract {
+  id           String         @id @default(uuid())
+  contractCode String         @unique @map("contract_code")
+  userId       String         @map("user_id")
+  planId       String?        @map("plan_id")
+  planName     String         @map("plan_name")
+  pricePaid    Float          @map("price_paid")
+  hashrate     Int            // MH/s
+  durationDays Int            @map("duration_days")
+  startDate    DateTime       @default(now()) @map("start_date")
+  endDate      DateTime       @map("end_date")
+  status       String         @default("ACTIVE") // ACTIVE, PENDING, EXPIRED, SUSPENDED
+  totalEarned  Float          @default(0.0) @map("total_earned")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan      MiningPlan?    @relation(fields: [planId], references: [id])
+  rewards   MiningReward[]
+  referrals Referral[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("mining_contracts")
+}
+
+model Deposit {
+  id            String        @id @default(uuid())
+  userId        String        @map("user_id")
+  amount        Float
+  currency      String        @default("USDT")
+  network       String        @default("TRC20")
+  txHash        String?       @unique @map("tx_hash")
+  toAddress     String        @map("to_address")
+  status        String        @default("PENDING") // PENDING, CONFIRMED, FAILED
+  confirmations Int           @default(0)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@map("deposits")
+}
+
+model Withdrawal {
+  id              String           @id @default(uuid())
+  userId          String           @map("user_id")
+  amount          Float
+  fee             Float            @default(1.0)
+  netAmount       Float            @map("net_amount")
+  walletAddress   String           @map("wallet_address")
+  network         String           @default("TRC20")
+  txHash          String?          @map("tx_hash")
+  status          String           @default("PENDING") // PENDING, PROCESSING, COMPLETED, REJECTED
+  rejectionReason String?          @map("rejection_reason")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@map("withdrawals")
+}
+
+model MiningReward {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  contractId String   @map("contract_id")
+  hashrate   Int
+  rewardRate Float    @map("reward_rate")
+  amount     Float
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contract MiningContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([contractId])
+  @@map("mining_rewards")
+}
+
+model Transaction {
+  id          String            @id @default(uuid())
+  userId      String            @map("user_id")
+  type        String            // DEPOSIT, WITHDRAWAL, PLAN_PURCHASE, MINING_REWARD, REFERRAL_COMMISSION, BALANCE_ADJUSTMENT
+  amount      Float
+  status      String            @default("COMPLETED") // PENDING, COMPLETED, FAILED, CANCELLED
+  referenceId String?           @map("reference_id")
+  description String?
+  createdAt   DateTime          @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@map("transactions")
+}
+
+model Referral {
+  id               String   @id @default(uuid())
+  referrerId       String   @map("referrer_id")
+  referredUserId   String   @map("referred_user_id")
+  level            Int      // 1, 2, or 3
+  commissionAmount Float    @map("commission_amount")
+  planPurchaseId   String?  @map("plan_purchase_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  referrer     User            @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredUser User            @relation("ReferredUser", fields: [referredUserId], references: [id], onDelete: Cascade)
+  contract     MiningContract? @relation(fields: [planPurchaseId], references: [id])
+
+  @@index([referrerId])
+  @@index([referredUserId])
+  @@map("referrals")
+}
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  adminId      String   @map("admin_id")
+  adminEmail   String   @map("admin_email")
+  action       String
+  targetUserId String?  @map("target_user_id")
+  details      String?
+  ipAddress    String?  @map("ip_address")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  admin      User  @relation("AdminAuditLogs", fields: [adminId], references: [id], onDelete: Cascade)
+  targetUser User? @relation("TargetUserAuditLogs", fields: [targetUserId], references: [id])
+
+  @@index([adminId])
+  @@map("audit_logs")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String?          @map("user_id") // Null means broadcast to all users
+  title     String
+  message   String
+  type      String           @default("SYSTEM") // SYSTEM, DEPOSIT, WITHDRAWAL, MINING, REFERRAL
+  isRead    Boolean          @default(false) @map("is_read")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+model SystemSetting {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("system_settings")
+}
+
+model PlatformStatistics {
+  id                        Int      @id @default(1)
+  totalUsers                Int      @default(0) @map("total_users")
+  totalHashrateMhs          BigInt   @default(0) @map("total_hashrate_mhs")
+  totalPaidRewardsUsdt      Float    @default(0.0) @map("total_paid_rewards_usdt")
+  activeContractsCount      Int      @default(0) @map("active_contracts_count")
+  completedWithdrawalsCount Int      @default(0) @map("completed_withdrawals_count")
+  updatedAt                 DateTime @updatedAt @map("updated_at")
+
+  @@map("platform_statistics")
+}
