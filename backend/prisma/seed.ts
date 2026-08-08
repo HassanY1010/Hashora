@@ -84,6 +84,7 @@ async function main() {
     { key: 'MIN_WITHDRAWAL_AMOUNT', value: '5.0', description: 'Minimum withdrawal amount in USDT' },
     { key: 'WITHDRAWAL_FEE', value: '1.0', description: 'Flat TRC20 network fee in USDT' },
     { key: 'PLATFORM_TRC20_RECEIVER_ADDRESS', value: 'TF73CSgKBtnu5kKJaX6AcGMVphD6Wg61An', description: 'Platform deposit receiver wallet address' },
+    { key: 'PLATFORM_PAYOUT_SENDER_ADDRESS', value: 'DK73CSgKBtnu5kKJaX6AcGMVphD6Wg37Am', description: 'Platform official payout sender wallet address' },
     { key: 'REQUIRED_BLOCK_CONFIRMATIONS', value: '20', description: 'Required TRON network confirmations' },
   ];
 

@@ -8,9 +8,10 @@ import { Save } from 'lucide-react';
 export const AdminSettingsPage: React.FC = () => {
   const { t } = useLanguage();
   const [rewardRate, setRewardRate] = useState('0.0001');
-  const [minWithdraw, setMinWithdraw] = useState('10.0');
+  const [minWithdraw, setMinWithdraw] = useState('5.0');
   const [withdrawalFee, setWithdrawalFee] = useState('1.0');
   const [receiverAddress, setReceiverAddress] = useState('TF73CSgKBtnu5kKJaX6AcGMVphD6Wg61An');
+  const [payoutSenderAddress, setPayoutSenderAddress] = useState('DK73CSgKBtnu5kKJaX6AcGMVphD6Wg37Am');
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
 
@@ -25,6 +26,7 @@ export const AdminSettingsPage: React.FC = () => {
       if (res.data.MIN_WITHDRAWAL_AMOUNT) setMinWithdraw(res.data.MIN_WITHDRAWAL_AMOUNT);
       if (res.data.WITHDRAWAL_FEE) setWithdrawalFee(res.data.WITHDRAWAL_FEE);
       if (res.data.PLATFORM_TRC20_RECEIVER_ADDRESS) setReceiverAddress(res.data.PLATFORM_TRC20_RECEIVER_ADDRESS);
+      if (res.data.PLATFORM_PAYOUT_SENDER_ADDRESS) setPayoutSenderAddress(res.data.PLATFORM_PAYOUT_SENDER_ADDRESS);
     } catch (err) {
       console.error(err);
     }
@@ -92,12 +94,24 @@ export const AdminSettingsPage: React.FC = () => {
 
           {/* Setting 4: Receiver TRC20 Address */}
           <div className="glass-card" style={{ padding: '28px' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '8px' }}>{t('receiverAddress')}</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '16px' }}>Public receiver wallet address shown to users on deposit page.</p>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '8px' }}>{t('receiverAddress')} (Deposits)</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '16px' }}>Public deposit receiver wallet address shown to users.</p>
             <div className="input-group">
               <input type="text" className="input-field" value={receiverAddress} onChange={(e) => setReceiverAddress(e.target.value)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }} />
             </div>
             <button onClick={() => handleSaveSetting('PLATFORM_TRC20_RECEIVER_ADDRESS', receiverAddress, 'Platform deposit receiver address')} className="btn-primary" disabled={loading} style={{ width: '100%', justifyContent: 'center' }}>
+              <Save size={16} /> {t('saveSettings')}
+            </button>
+          </div>
+
+          {/* Setting 5: Payout Sender TRC20 Address */}
+          <div className="glass-card" style={{ padding: '28px' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '8px' }}>Platform Payout Sender Address (Withdrawals)</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '16px' }}>Official platform payout wallet address used to send user withdrawals.</p>
+            <div className="input-group">
+              <input type="text" className="input-field" value={payoutSenderAddress} onChange={(e) => setPayoutSenderAddress(e.target.value)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }} />
+            </div>
+            <button onClick={() => handleSaveSetting('PLATFORM_PAYOUT_SENDER_ADDRESS', payoutSenderAddress, 'Platform official payout sender wallet address')} className="btn-primary" disabled={loading} style={{ width: '100%', justifyContent: 'center' }}>
               <Save size={16} /> {t('saveSettings')}
             </button>
           </div>
