@@ -29,8 +29,12 @@ export const ReferralsPage: React.FC = () => {
     }
   };
 
+  const effectiveLink = data.referralCode
+    ? `${window.location.origin}/register?ref=${data.referralCode}`
+    : data.referralLink || `${window.location.origin}/register`;
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(data.referralLink);
+    navigator.clipboard.writeText(effectiveLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
@@ -56,7 +60,7 @@ export const ReferralsPage: React.FC = () => {
             <input
               type="text"
               className="input-field"
-              value={data.referralLink}
+              value={effectiveLink}
               readOnly
               style={{ flex: 1, minWidth: '280px', fontFamily: 'var(--font-mono)', fontSize: '0.95rem' }}
             />

@@ -39,9 +39,11 @@ export class ReferralsService {
       ? parseFloat(Number(totalCommissionSum._sum.commissionAmount).toFixed(6))
       : 0;
 
+    const frontendUrl = process.env.FRONTEND_URL || 'https://hashora-1.onrender.com';
+
     return {
       referralCode: user?.referralCode || '',
-      referralLink: `https://cloudmining.com/register?ref=${user?.referralCode || ''}`,
+      referralLink: `${frontendUrl}/register?ref=${user?.referralCode || ''}`,
       totalReferrals: totalReferralsCount,
       activeReferrals: activeReferralsCount,
       totalCommission,
