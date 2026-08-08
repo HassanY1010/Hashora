@@ -7,7 +7,7 @@ export const Calculator: React.FC = () => {
   const [selectedPlanPrice, setSelectedPlanPrice] = useState<number>(10); // Default Pro plan
 
   const plans = [
-    { name: t('freeTrial'), price: 0, hashrate: 20, duration: 3, expectedUsdt: '0.10 - 0.50' },
+    { name: t('freeTrial'), price: 0, hashrate: 20, duration: 30, expectedUsdt: '0.50 - 1.00' },
     { name: t('starterPlan'), price: 5, hashrate: 100, duration: 30, expectedUsdt: '6.00 - 7.00' },
     { name: t('proPlan'), price: 10, hashrate: 700, duration: 30, expectedUsdt: '11.50 - 14.00' },
     { name: t('premiumPlan'), price: 20, hashrate: 4500, duration: 30, expectedUsdt: '24.00 - 30.00' },

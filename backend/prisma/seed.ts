@@ -46,8 +46,8 @@ async function main() {
           name: 'Free Trial',
           price: 0.0,
           hashrate: 20,
-          durationDays: 3,
-          description: 'Free trial contract (≈ 0.10 - 0.50 USDT expected yield). 1 claim per account.',
+          durationDays: 30,
+          description: 'Free trial contract (≈ 0.50 - 1.00 USDT expected yield). 1 claim per account.',
           status: 'ACTIVE',
         },
         {

@@ -186,13 +186,13 @@ export const LandingPage: React.FC = () => {
 
               {/* Expected Yield Box */}
               <div style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px dashed rgba(16, 185, 129, 0.3)', padding: '10px 14px', borderRadius: '10px', marginBottom: '20px' }}>
-                <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>{t('expectedYield')}</span>
-                <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#34d399' }}>≈ 0.10 - 0.50 USDT</span>
+                <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>{t('expectedYield')} (30 Days)</span>
+                <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#34d399' }}>≈ 0.50 - 1.00 USDT</span>
               </div>
 
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px', flex: 1 }}>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem' }}><CheckCircle size={18} color="#10b981" /> ⚡ <strong>20 MH/s</strong> {t('miningHashrate')}</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem' }}><CheckCircle size={18} color="#10b981" /> ⏱ <strong>{t('duration3Days')}</strong></li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem' }}><CheckCircle size={18} color="#10b981" /> ⏱ <strong>{t('duration30Days')}</strong></li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem' }}><CheckCircle size={18} color="#10b981" /> 🎁 {t('freeTrial')}</li>
                 <li style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem' }}><CheckCircle size={18} color="#10b981" /> 🔒 {t('oneClaimPerUser')}</li>
               </ul>

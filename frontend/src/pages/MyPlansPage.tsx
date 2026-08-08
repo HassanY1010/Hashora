@@ -77,7 +77,7 @@ export const MyPlansPage: React.FC = () => {
   };
 
   const getExpectedYieldText = (price: number) => {
-    if (price === 0) return '≈ 0.10 - 0.50 USDT';
+    if (price === 0) return '≈ 0.50 - 1.00 USDT';
     if (price === 5) return '≈ 6.00 - 7.00 USDT';
     if (price === 10) return '≈ 11.50 - 14.00 USDT';
     if (price === 20) return '≈ 24.00 - 30.00 USDT';
