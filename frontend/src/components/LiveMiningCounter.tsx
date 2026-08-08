@@ -8,7 +8,8 @@ interface LiveMiningCounterProps {
   baseEarnings?: number;
 }
 
-const STORAGE_KEY = 'crypto_mine_live_ticker_v2';
+const STORAGE_KEY = 'crypto_mine_live_ticker_v3';
+const DEFAULT_START_VALUE = 6.749606;
 
 export const LiveMiningCounter: React.FC<LiveMiningCounterProps> = ({
   totalHashrate,
@@ -35,12 +36,12 @@ export const LiveMiningCounter: React.FC<LiveMiningCounterProps> = ({
         const elapsedSec = (Date.now() - lastTimestamp) / 1000;
         const offlineYield = elapsedSec > 0 ? elapsedSec * perSecondRate : 0;
         const calculated = savedValue + offlineYield;
-        return Math.max(baseEarnings, calculated);
+        return Math.max(DEFAULT_START_VALUE, calculated);
       }
     } catch (e) {
       console.error('Error reading ticker storage:', e);
     }
-    return baseEarnings > 0 ? baseEarnings : 0.000000;
+    return Math.max(DEFAULT_START_VALUE, baseEarnings);
   });
 
   const valueRef = useRef(liveValue);
@@ -76,6 +77,13 @@ export const LiveMiningCounter: React.FC<LiveMiningCounterProps> = ({
 
     return () => clearInterval(interval);
   }, [perSecondRate]);
+
+  // Format with leading zero if single digit integer part (e.g. +06.749606)
+  const formatTicker = (val: number) => {
+    const parts = val.toFixed(6).split('.');
+    const intPart = parts[0].padStart(2, '0');
+    return `+${intPart}.${parts[1]}`;
+  };
 
   return (
     <div
@@ -130,7 +138,7 @@ export const LiveMiningCounter: React.FC<LiveMiningCounterProps> = ({
                 textShadow: hasActiveContract ? '0 0 15px rgba(52, 211, 153, 0.4)' : '0 0 15px rgba(56, 189, 248, 0.4)',
               }}
             >
-              +{liveValue.toFixed(6)}
+              {formatTicker(liveValue)}
             </span>
             <span style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-muted)' }}>USDT</span>
           </div>
